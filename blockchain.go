@@ -9,4 +9,6 @@ func init() {
 }
 
 func main() {
+	b := NewBlock(0, "Init Hash")
+	b.Print()
 }
