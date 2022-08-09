@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 )
 
@@ -13,8 +12,9 @@ func main() {
 	blockchain := NewBlockchain()
 	blockchain.Print()
 
+	blockchain.AddTransaction("A", "B", 1.0)
+
 	previousHash := blockchain.LastBlock().Hash()
-	fmt.Println(previousHash)
 	blockchain.CreateBlock(5, previousHash)
 	blockchain.Print()
 
