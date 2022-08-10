@@ -7,7 +7,11 @@ import (
 	"time"
 )
 
-const MINE_DIFFICULTY = 3
+const (
+	MINING_DIFFICULTY = 3
+	MINING_SENDER     = "The Blockchain"
+	MINING_REWARD     = 1.0
+)
 
 type Block struct {
 	timestamp    int64
