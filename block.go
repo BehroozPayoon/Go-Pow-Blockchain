@@ -7,10 +7,12 @@ import (
 	"time"
 )
 
+const MINE_DIFFICULTY = 3
+
 type Block struct {
+	timestamp    int64
 	nonce        int
 	previousHash [32]byte
-	timestamp    int64
 	transactions []*Transaction
 }
 

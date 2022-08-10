@@ -33,6 +33,31 @@ func (bc *Blockchain) AddTransaction(senderAddress, recipientAddress string, val
 	bc.transactionPool = append(bc.transactionPool, t)
 }
 
+func (bc *Blockchain) CopyTransactionPool() []*Transaction {
+	transactions := make([]*Transaction, 0)
+	for _, t := range bc.transactionPool {
+		transactions = append(transactions, NewTransaction(t.senderAddress, t.recipientAddress, t.value))
+	}
+	return transactions
+}
+
+func (bc *Blockchain) ValidProof(nonce int, previousHash [32]byte, transactions []*Transaction, difficulty int) bool {
+	zeros := strings.Repeat("0", difficulty)
+	guessBlock := Block{0, nonce, previousHash, transactions}
+	guessHashStr := fmt.Sprintf("%x", guessBlock.Hash())
+	return guessHashStr[:difficulty] == zeros
+}
+
+func (bc *Blockchain) ProofOfWork() int {
+	transactions := bc.CopyTransactionPool()
+	previousHash := bc.LastBlock().Hash()
+	nonce := 0
+	for !bc.ValidProof(nonce, previousHash, transactions, MINE_DIFFICULTY) {
+		nonce += 1
+	}
+	return nonce
+}
+
 func (bc *Blockchain) Print() {
 	for i, block := range bc.chain {
 		fmt.Printf("%s Chain %d %s\n", strings.Repeat("=", 25), i, strings.Repeat("=", 25))
