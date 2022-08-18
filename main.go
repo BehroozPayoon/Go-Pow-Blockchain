@@ -1,7 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"log"
+	"pow-blockchain/core"
+	"pow-blockchain/wallet"
 )
 
 func init() {
@@ -9,15 +12,23 @@ func init() {
 }
 
 func main() {
-	blockchain := NewBlockchain("My Address")
-	blockchain.Print()
+	walletM := wallet.NewWallet()
+	walletA := wallet.NewWallet()
+	walletB := wallet.NewWallet()
 
-	blockchain.AddTransaction("A", "B", 1.0)
+	// Wallet
+	t := wallet.NewTransaction(walletA.PrivateKey(), walletA.PublicKey(), walletA.Address(), walletB.Address(), 1.0)
+
+	// Blockchain
+	blockchain := core.NewBlockchain(walletM.Address())
+	isAdded := blockchain.AddTransaction(walletA.Address(), walletB.Address(), 1.0,
+		walletA.PublicKey(), t.GenerateSignature())
+	fmt.Println("Added? ", isAdded)
+
 	blockchain.Mining()
 	blockchain.Print()
 
-	blockchain.AddTransaction("C", "D", 4.0)
-	blockchain.AddTransaction("X", "Y", 2.0)
-	blockchain.Mining()
-	blockchain.Print()
+	fmt.Printf("A %.1f\n", blockchain.CalculateTotalAmount(walletA.Address()))
+	fmt.Printf("B %.1f\n", blockchain.CalculateTotalAmount(walletB.Address()))
+	fmt.Printf("M %.1f\n", blockchain.CalculateTotalAmount(walletM.Address()))
 }

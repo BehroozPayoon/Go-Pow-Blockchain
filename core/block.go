@@ -1,16 +1,10 @@
-package main
+package core
 
 import (
 	"crypto/sha256"
 	"encoding/json"
 	"fmt"
 	"time"
-)
-
-const (
-	MINING_DIFFICULTY = 3
-	MINING_SENDER     = "The Blockchain"
-	MINING_REWARD     = 1.0
 )
 
 type Block struct {
